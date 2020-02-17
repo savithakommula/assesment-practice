@@ -7,12 +7,16 @@ import org.openqa.selenium.support.PageFactory;
 
 import com.rbs.assesment.BaseClass;
 
-public class SignInPage extends BaseClass {
-	public static final String SIGNIN_XPATH= "//*[@id='header']/div[2]/div/div/nav/div[1]/a";
+public class SignInPage {
+	public static final String SIGNIN_XPATH= "//*[@class = 'login']";
 	public static final String EMAIL_ID = "email";
 	public static final String PASSWORD_ID = "passwd";
 	public static final String SIGNIN_SUBMIT_ID = "SubmitLogin";
 	
+	public SignInPage(WebDriver webDriver)	
+	{
+	    PageFactory.initElements(webDriver, this);
+	}
 
 	@FindBy(xpath = SIGNIN_XPATH)
 	WebElement signIn;
@@ -41,13 +45,6 @@ public class SignInPage extends BaseClass {
 	public WebElement getSiginSubmit() {
 		return siginSubmit;
 	}
-	
-	
-	//public SignInPage(WebDriver webDriver)	
-	//{
-	//	SignInPage.webDriver = webDriver;
-	//       PageFactory.initElements(webDriver, this);
-	//}
 	
 
 }

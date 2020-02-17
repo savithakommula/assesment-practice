@@ -16,7 +16,7 @@ import com.rbs.assesment.BaseClass;
 public class TshirtOrderPage extends BaseClass {
 
 	
-private static final String TSHIRT_LIST_XPATH= "//*[@class = 'product_list grid row']/li[2]";
+//private static final String TSHIRT_LIST_XPATH= "//*[@class = 'product_list grid row']/li[2]";
 private static final String ADD_TO_CART_XPATH = "//*[@class = 'button ajax_add_to_cart_button btn btn-default']";
 private static final String TSHIRT_XPATH = "//*[@class = 'ajax_block_product col-xs-12 col-sm-6 col-md-4 first-in-line last-line first-item-of-tablet-line first-item-of-mobile-line last-mobile-line']";
 private static final String PROCEED_TO_CHECOUT_XPATH = "//*[@class = 'button-container']/a";
@@ -28,10 +28,17 @@ private static final String CONFIRM_ORDER_XPATH = "//*[@class = 'button btn btn-
 private static final String BACK_TO_ORDERS_XPATH = "//*[@class = 'button-exclusive btn btn-default']";
 private static final String TABLE_ORDER_HISTORY_XPATH = "//*[@id = 'order-list']/tbody";
 private static final String ORDER_NUMBER_XPATH = "//*[@class = 'box']";
+private static final String ORDER_MESSAGE_XPATH = "//*[@id = 'center_column']/h1";
+private static final String SHIPPING_MESSAGE_XPATH = "//*[@class = 'page-heading']";
+private static final String SHOPPING_CART_SUMMARY_ID = "cart_title";
+private static final String PRODUCT_ADDED_SUCCESSFUL_MESSAGE_XPATH = "//*[@class = 'layer_cart_product col-xs-12 col-md-6']/h2";
 
+public TshirtOrderPage(WebDriver webDriver )	
+{
+    PageFactory.initElements(webDriver, this);
+}
 
-	@FindBy(xpath = TSHIRT_LIST_XPATH)
-	public WebElement tshirtList;
+	
 	
 	@FindBy(xpath = TSHIRT_XPATH)
 	public WebElement tshirt;
@@ -65,15 +72,24 @@ private static final String ORDER_NUMBER_XPATH = "//*[@class = 'box']";
 	
 	@FindBy(xpath = ORDER_NUMBER_XPATH )
 	public WebElement orderNumber;
+	
+	@FindBy(xpath = ORDER_MESSAGE_XPATH )
+	public WebElement ordermessage;
 
+	@FindBy(xpath = SHIPPING_MESSAGE_XPATH )
+	public WebElement shippingMessage;
+
+	@FindBy(xpath = PRODUCT_ADDED_SUCCESSFUL_MESSAGE_XPATH )
+	public WebElement productAddedSuccessMessage;
+	
+	@FindBy(id = SHOPPING_CART_SUMMARY_ID )
+	public WebElement shoppingCartSummary;
 	
 	public WebElement getAddToCart() {
 		return addToCart;
 	}
 
-	public WebElement getTshirtList() {
-		return tshirtList;
-	}
+	
 	
 	public WebElement getTshirt() {
 		return tshirt;
@@ -110,15 +126,27 @@ private static final String ORDER_NUMBER_XPATH = "//*[@class = 'box']";
 	public WebElement getTableOrderHistory() {
 		return tableOrderHistory;
 	}
+	
 	public WebElement getOrderNumber() {
 		return orderNumber;
 	}
+
+	public WebElement getOrdermessage() {
+		return ordermessage;
+	}
 	
-	//public TshirtOrderPage(WebDriver webDriver)	
-	//{
-		//TshirtOrderPage.webDriver = webDriver;
-	      // PageFactory.initElements(webDriver, this);
-	//}
+	public WebElement getShippingMessage() {
+		return shippingMessage;
+	}
+	
+	public WebElement getProductAddedSuccessMessage() {
+		return productAddedSuccessMessage;
+	}
+	
+	public WebElement getShoppingCartSummary() {
+		return shoppingCartSummary;
+	}
+	
 	
 	public String fetchOrderNumber() {
 		String orderText = getOrderNumber().getText(); 

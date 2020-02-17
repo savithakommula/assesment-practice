@@ -13,7 +13,7 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(
         features = {"src/test/java/com/rbs/assesment/features"},
         glue="com.rbs.assesment.stepdefs",
-        tags= {"@tag1, @tag2"},
+        tags= {"@ordertshirt, @updatefirstName"},
         format = {"pretty", "html:test-output/Destination", "json:test-output/Destination/cucmber.json"},
         plugin = {"com.cucumber.listener.ExtentCucumberFormatter:test-output/cucumber-reports/report.html"}
        
@@ -27,4 +27,3 @@ public class CucumberTestRunner{
 		Reporter.loadXMLConfig(path);
 	}
 }
-

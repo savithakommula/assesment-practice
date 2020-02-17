@@ -6,24 +6,22 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BaseClass {
+	
+	protected static WebDriver webDriver;
+	protected static Properties props ;
 	
 	public BaseClass(){
 		initializeProperties();
 		initializeBrowser();
 		
 	}
-	protected static WebDriver webDriver;
-	protected static Properties props ;
+
 	
 	public void initializeBrowser()
 	{
@@ -62,14 +60,8 @@ public class BaseClass {
 		
 	}
 	
-	public void waitForElement(WebElement element) {
-		try {
-			WebDriverWait driverWait = new WebDriverWait(webDriver, 2000);
-			driverWait.until(ExpectedConditions.elementToBeClickable(element));
-			
-		}catch (Exception e) {
-			Assert.fail();
-		}
-		
+	public void closeBrowser() {
+		webDriver.quit();
 	}
+
 }

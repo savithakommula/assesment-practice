@@ -3,132 +3,130 @@ package com.rbs.assesment.stepdefs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.annotation.ElementType;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.cucumber.listener.Reporter;
-import com.rbs.assesment.AssesmentConstants;
 import com.rbs.assesment.BaseClass;
+import com.rbs.assesment.ElementUtil;
 import com.rbs.assesment.pages.HomePage;
-import com.rbs.assesment.pages.SignInPage;
 import com.rbs.assesment.pages.TshirtOrderPage;
 
 import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 
 public class OrderAndVerifyStepDef extends BaseClass{
 
-	public OrderAndVerifyStepDef() {
-		super();
-	}
+	
+	TshirtOrderPage tshirt =  new TshirtOrderPage(webDriver);
+	HomePage home =  new HomePage(webDriver);
+	 String orderNumber;
+	 
 
-	
-	SignInPage signinpage = null;
-	HomePage home =  null;
-	TshirtOrderPage tshirt =  null;
-	
-	@Given ("^I am on Automation Practice website$")
-	public void I_am_on_Automation_Practice_website()
-	{
-		//webDriver.get("http://automationpractice.com");
-		
-	}
-	
-    @And ("^I click on Signin button$")
-    public void I_click_on_Signin_button() throws InterruptedException
-    {
-    	signinpage = PageFactory.initElements(webDriver, SignInPage.class);
-    	signinpage.getSignIn().click();
-    	Reporter.addStepLog("Clicked on SignIn button");
-    } 
     
-    @When ("^I enter my credentials$")
-    public void I_enter_my_credentials() throws InterruptedException
+    //Clicking on Tshirts tab from my account page
+    @And ("^I clicked on \"([^\"]*)\" tab$")
+    public void I_clicked_on_Tshirt_tab(String tshirt) throws Exception
     {
-    	signinpage.getEmail().clear();
-    	signinpage.getEmail().sendKeys(props.getProperty(AssesmentConstants.USER_ID));
-    	signinpage.getPassword().clear();
-    	signinpage.getPassword().sendKeys(props.getProperty(AssesmentConstants.PASSWORD));
-    	signinpage.getSiginSubmit().click();
-    }
-    
-    @Then ("^It should display Automation Practice home page$")
-    public void It_should_display_Automation_Practice_home_page()
-    {
-    	String expectedURL = "http://automationpractice.com/index.php?controller=my-account";
-    	String actualURL = webDriver.getCurrentUrl();
-    	assertEquals(expectedURL, actualURL);
-    }
-    
-    @And ("^I ordered Tshirt$")
-    public void I_ordered_Tshirt() throws InterruptedException
-    {
-    	home = PageFactory.initElements(webDriver, HomePage.class);
-    	tshirt = PageFactory.initElements(webDriver, TshirtOrderPage.class);
-   /* 	ArrayList<WebElement> categoryList = home.getCategoryList();
-    	int size = categoryList.size();
-    	if(size != 0)
-    	{
-    		home.selectTshirtsTab(categoryList);
-    		
-    		//ArrayList<WebElement> tShirtList= tshirt.getTshirtList();
-    		//WebElement tShirtElement =  tShirtList!= null ? tShirtList.get(0): null;
-    		
-    		//if(tShirtElement != null ) {
-            Actions actions = new Actions(webDriver);
-            actions.moveToElement(tshirt.getTshirtList());
-            tshirt.getAddToCart().click();
+    	ElementUtil.waitForElement(home.getTshirtTab());
+    	String text = home.getTshirtTab().getAttribute("title");
+    	if(text.equalsIgnoreCase(tshirt)) {
+    	ElementUtil.click(home.getTshirtTab());
+    	Reporter.addStepLog("I clicked on Tshirts tab");
     		}
-    	}
-    	*/
-    	
-    	WebDriverWait wait = new WebDriverWait(webDriver, 10);
-       
+    }
     	
     	
-    	WebElement tShirtElemnt = home.getCategory();
-    	tShirtElemnt.click();
-    	Thread.sleep(4000);
-    	WebElement addtShirtElement = tshirt.getTshirt();
-    	Actions actions = new Actions(webDriver);
-        actions.moveToElement(addtShirtElement).build().perform();
-        webDriver.switchTo().defaultContent();
-        Thread.sleep(2000);
-        tshirt.getAddToCart().click();
+    
+    //Adding tshirt to cart and checkout the order
+    @Then ("^I ordered Tshirt$")
+    public void I_ordered_Tshirt() throws Exception
+    {
+    	 Actions actions = new Actions(webDriver);
+    	 ElementUtil.waitForElement(tshirt.getTshirt());
+    	//WebElement addtShirtElement = tshirt.getTshirt();
+    	//Actions actions = new Actions(webDriver);
+        actions.moveToElement(tshirt.getTshirt()).build().perform();
+        //webDriver.switchTo().defaultContent();
+        ElementUtil.click(tshirt.getAddToCart());
+        Reporter.addStepLog("I added Tshirt to Cart");
         Thread.sleep(2000);
         webDriver.switchTo().activeElement();
+        String expectedProductAddedMessage = "Product successfully added to your shopping cart";
+        ElementUtil.waitForElement(tshirt.getProductAddedSuccessMessage());
+        String actualProductAddedMessage = tshirt.getProductAddedSuccessMessage().getText();
+        assertEquals(expectedProductAddedMessage, actualProductAddedMessage);
         String expectedProceedToCheckoutTitle = "Proceed to checkout";
         String proceedToCheckoutTitle = tshirt.getProceedToCheckOut().getAttribute("title");
         assertEquals(expectedProceedToCheckoutTitle, proceedToCheckoutTitle);
-        tshirt.getProceedToCheckOut().click();
-       
+        ElementUtil.click(tshirt.getProceedToCheckOut());
         //webDriver.switchTo().activeElement();
-        Thread.sleep(5000);
-       // wait.until(
-            	//ExpectedConditions.elementToBeClickable(tshirt.getProceedToCheckOut()));
         
-        tshirt.getProceedToCheckOut2().click();
-        Thread.sleep(5000);
-        tshirt.getProceedToCheckOut3().click();
-        Thread.sleep(5000);
+        String expectedShippingCartMessage = "SHOPPING-CART SUMMARY\n"
+        		+"Your shopping cart contains: 1 Product";
+        ElementUtil.waitForElement(tshirt.getShoppingCartSummary());
+        String actualShippingCartMessage = tshirt.getShoppingCartSummary().getText();
+        assertEquals(expectedShippingCartMessage, actualShippingCartMessage);
+        Reporter.addStepLog("Shopping Cart summary page got displayed");
+        ElementUtil.click(tshirt.getProceedToCheckOut2());
+        
+        
+        String expectedAddressmessage = "ADDRESSES";
+        ElementUtil.waitForElement(tshirt.getOrdermessage());
+        String actualAddressmessage = tshirt.getOrdermessage().getText();
+        assertEquals(expectedAddressmessage, actualAddressmessage); 
+        Reporter.addStepLog("Address page got displayed");
+        ElementUtil.click(tshirt.getProceedToCheckOut3());
+        
+        String expectedShippingmessage = "SHIPPING";
+        ElementUtil.waitForElement(tshirt.getShippingMessage());
+        String actualShippingMessage = tshirt.getShippingMessage().getText();
+        assertEquals(expectedShippingmessage, actualShippingMessage);
+        Reporter.addStepLog("Shipping page got displayed");
         tshirt.getTermsCheckBox().click();
-        Thread.sleep(5000);
-        tshirt.getProceedToCheckOut2().click();
-        Thread.sleep(5000);
-        tshirt.getPayByBank().click();
-        Thread.sleep(5000);
-        tshirt.getConfirmOrder().click();
-        Thread.sleep(5000);
-        String orderNumber = tshirt.fetchOrderNumber();
-        tshirt.getBackToOrders().click();
-        Thread.sleep(5000);
-        boolean flag = tshirt.isOrderNumberMatched(orderNumber);
-        assertTrue(flag);
+        ElementUtil.click(tshirt.getProceedToCheckOut2());
+        
+        
+        String expectedpaymentMethodMessage = "PLEASE CHOOSE YOUR PAYMENT METHOD";
+        ElementUtil.waitForElement(tshirt.getOrdermessage());
+        String actualpaymentMethodMessage = tshirt.getOrdermessage().getText();
+        assertEquals(expectedpaymentMethodMessage, actualpaymentMethodMessage);
+        Reporter.addStepLog("Payment page got displayed");
+        ElementUtil.click(tshirt.getPayByBank());
+        
+        String expectedOrderSummaryMessage = "ORDER SUMMARY";
+        ElementUtil.waitForElement(tshirt.getOrdermessage());
+        String actualOrderSummaryMessage= tshirt.getOrdermessage().getText();
+        assertEquals(expectedOrderSummaryMessage, actualOrderSummaryMessage); 
+        Reporter.addStepLog("Order summary page got displayed");
+         ElementUtil.click(tshirt.getConfirmOrder());
+         
+         
+        String expectedConfirmationMessage = "ORDER CONFIRMATION";
+        ElementUtil.waitForElement(tshirt.getOrdermessage());
+        String actualConfirmationMessage= tshirt.getOrdermessage().getText();
+        assertEquals(expectedConfirmationMessage, actualConfirmationMessage); 
+        Reporter.addStepLog("Order confirmation page got displayed");
+        
+        orderNumber = tshirt.fetchOrderNumber();
+        Reporter.addStepLog("I have ordered Tshirt successfully, my Order number is: " +orderNumber);
+        ElementUtil.click(tshirt.getBackToOrders());
         
     }
+    
+    //Verifying the Order History
+    @And ("^I verified in Orders History$")
+    public void I_verified_in_Orders_History()
+    { 
+    	String expectedOrderHistory = "ORDER HISTORY";
+    	String actualOrderHistory= tshirt.getOrdermessage().getText();
+        assertEquals(expectedOrderHistory, actualOrderHistory); 
+        Reporter.addStepLog("Order confirmation page got displayed");
+        boolean flag = tshirt.isOrderNumberMatched(orderNumber);
+        assertTrue(flag);
+        Reporter.addStepLog("I found my Order number in my Order history");
+    }
+    
 
 }

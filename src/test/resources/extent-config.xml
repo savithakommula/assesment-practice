@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extentreports>
+    <configuration>
+        <theme>standard</theme>
+        <encoding>UTF-8</encoding>
+        <documentTitle> Assesment Extent Report</documentTitle>
+        <reportName>Assesment Automation Report</reportName>
+        <testViewChartLocation>bottom</testViewChartLocation>
+    </configuration>
+</extentreports>

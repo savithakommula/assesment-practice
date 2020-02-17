@@ -8,6 +8,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.cucumber.listener.Reporter;
+import com.rbs.assesment.AssesmentConstants;
 import com.rbs.assesment.BaseClass;
 import com.rbs.assesment.pages.HomePage;
 import com.rbs.assesment.pages.SignInPage;
@@ -20,9 +22,10 @@ import cucumber.api.java.en.When;
 
 public class OrderAndVerifyStepDef extends BaseClass{
 
-	static {
-		initializeBrowser();
+	public OrderAndVerifyStepDef() {
+		super();
 	}
+
 	
 	SignInPage signinpage = null;
 	HomePage home =  null;
@@ -40,16 +43,16 @@ public class OrderAndVerifyStepDef extends BaseClass{
     {
     	signinpage = PageFactory.initElements(webDriver, SignInPage.class);
     	signinpage.getSignIn().click();
+    	Reporter.addStepLog("Clicked on SignIn button");
     } 
     
     @When ("^I enter my credentials$")
     public void I_enter_my_credentials() throws InterruptedException
     {
-    	Thread.sleep(5000);
     	signinpage.getEmail().clear();
-    	signinpage.getEmail().sendKeys("SeleniumTesting@gmail.com");
+    	signinpage.getEmail().sendKeys(props.getProperty(AssesmentConstants.USER_ID));
     	signinpage.getPassword().clear();
-    	signinpage.getPassword().sendKeys("Selenium123");
+    	signinpage.getPassword().sendKeys(props.getProperty(AssesmentConstants.PASSWORD));
     	signinpage.getSiginSubmit().click();
     }
     

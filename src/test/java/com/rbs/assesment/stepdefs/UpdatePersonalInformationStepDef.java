@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 
+import com.rbs.assesment.AssesmentConstants;
 import com.rbs.assesment.BaseClass;
 import com.rbs.assesment.pages.PersonalInformationPage;
 import com.rbs.assesment.pages.SignInPage;
@@ -20,10 +21,12 @@ public class UpdatePersonalInformationStepDef extends BaseClass {
 	//PersonalInformationPage personalInfo = new PersonalInformationPage();
 	PersonalInformationPage personalInfo= null;
 	
+	static final String FIRST_NAME = "XYZ";
+	
 	@When("^I click on account button$")
 	public void I_click_on_account_button() {
 		personalInfo = PageFactory.initElements(webDriver, PersonalInformationPage.class);
-		personalInfo.getAccount();
+		personalInfo.getAccount().click();
 	}
 
 	@And("^I click on my personal information$")
@@ -38,15 +41,15 @@ public class UpdatePersonalInformationStepDef extends BaseClass {
 	public void I_update_my_first_name() throws InterruptedException {
 		
 		personalInfo.getFirstName().clear();
-		personalInfo.getFirstName().sendKeys("XYZ");
+		personalInfo.getFirstName().sendKeys(FIRST_NAME);
 		personalInfo.getOldPassword().clear();
-		personalInfo.getOldPassword().sendKeys("Selenium123");
+		personalInfo.getOldPassword().sendKeys(props.getProperty(AssesmentConstants.PASSWORD));
 		personalInfo.getSave().click();
 		Thread.sleep(5000);
 		String name = webDriver.findElement(By.xpath("//*[@class = 'account']/span")).getText();
 		System.out.println(name);
 		String firstName[] = name.split(" ");
-		boolean flag = firstName[0].equalsIgnoreCase("XYZ");
+		boolean flag = firstName[0].equalsIgnoreCase(FIRST_NAME);
 		assertTrue(flag);
 		
 		

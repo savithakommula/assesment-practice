@@ -1,9 +1,9 @@
 # assesment-practice
 ### Required Softwares:
-Maven
-GIT
-Java
-Eclipse
+<li>Maven</li>
+<li>GIT</li>
+<li>Java</li>
+<li>Eclipse</li>
 
 ## Work Space Set up
 1) clone the git repo using repo url https://github.com/savithakommula/assesment-practice.git

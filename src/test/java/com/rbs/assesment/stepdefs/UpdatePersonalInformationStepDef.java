@@ -3,6 +3,8 @@ package com.rbs.assesment.stepdefs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.assertj.core.api.SoftAssertions;
+
 import com.cucumber.listener.Reporter;
 import com.rbs.assesment.BaseClass;
 import com.rbs.assesment.ElementUtil;
@@ -15,7 +17,7 @@ public class UpdatePersonalInformationStepDef extends BaseClass {
 	
 
 	PersonalInformationPage personalInfo= new PersonalInformationPage(webDriver);
-	
+	SoftAssertions soft = new SoftAssertions();
 	static final String FIRST_NAME = "XYZ";
 	
 	@When("^I click on account button$")
@@ -44,12 +46,11 @@ public class UpdatePersonalInformationStepDef extends BaseClass {
 	 @And ("^I verified the changes for first name$")
 	 public void I_verified_the_changes_for_first_name() throws Exception
 	 {
-		 //String name = webDriver.findElement(By.xpath("//*[@class = 'account']/span")).getText();
-			//System.out.println(name);
 		 ElementUtil.waitForElement(personalInfo.getUpdateSuccessfulMessage());
 		 String expectedSuccessMessage = "Your personal information has been successfully updated.";
 		 String actualSuccessMessage = personalInfo.getUpdateSuccessfulMessage().getText();
-		 assertEquals(expectedSuccessMessage, actualSuccessMessage);
+		 //assertEquals(expectedSuccessMessage, actualSuccessMessage);
+		  	soft.assertThat(actualSuccessMessage).isEqualTo(expectedSuccessMessage);
 		 Reporter.addStepLog("Update successful message got displayed as: " +actualSuccessMessage);
 		 ElementUtil.waitForElement(personalInfo.getAccount());
 		    String name = personalInfo.getAccount().getText();
@@ -57,6 +58,7 @@ public class UpdatePersonalInformationStepDef extends BaseClass {
 			boolean flag = firstName[0].equalsIgnoreCase(FIRST_NAME);
 			assertTrue(flag);
 			Reporter.addStepLog("I have changed my first name suuccessfully");
+			soft.assertAll();
 	 }
 	 
 	 @And("^I close my browser$")

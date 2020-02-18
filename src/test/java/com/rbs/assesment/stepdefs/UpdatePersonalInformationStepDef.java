@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.cucumber.listener.Reporter;
-import com.rbs.assesment.AssesmentConstants;
 import com.rbs.assesment.BaseClass;
 import com.rbs.assesment.ElementUtil;
 import com.rbs.assesment.pages.PersonalInformationPage;
@@ -38,7 +37,7 @@ public class UpdatePersonalInformationStepDef extends BaseClass {
 		personalInfo.getFirstName().clear();
 		personalInfo.getFirstName().sendKeys(FIRST_NAME);
 		personalInfo.getOldPassword().clear();
-		personalInfo.getOldPassword().sendKeys(props.getProperty(AssesmentConstants.PASSWORD));
+		personalInfo.getOldPassword().sendKeys(decryptPassword());
 		ElementUtil.click(personalInfo.getSave());
 	}
 	
@@ -62,7 +61,7 @@ public class UpdatePersonalInformationStepDef extends BaseClass {
 	 
 	 @And("^I close my browser$")
 	 public void I_close_my_browser() {
-		 closeBrowser();
+		 tearDown();
 		 
 	 }
 

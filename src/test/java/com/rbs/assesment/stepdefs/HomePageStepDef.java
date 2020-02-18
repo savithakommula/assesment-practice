@@ -52,7 +52,7 @@ public class HomePageStepDef extends BaseClass{
 		    	signinpage.getEmail().clear();
 		    	signinpage.getEmail().sendKeys(props.getProperty(AssesmentConstants.USER_ID));
 		    	signinpage.getPassword().clear();
-		    	signinpage.getPassword().sendKeys(props.getProperty(AssesmentConstants.PASSWORD));
+		    	signinpage.getPassword().sendKeys(decryptPassword());
 		    	ElementUtil.click(signinpage.getSiginSubmit());  
 		    	
 			   }

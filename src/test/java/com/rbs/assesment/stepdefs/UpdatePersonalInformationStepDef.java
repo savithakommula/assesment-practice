@@ -58,6 +58,7 @@ public class UpdatePersonalInformationStepDef extends BaseClass {
 			boolean flag = firstName[0].equalsIgnoreCase(FIRST_NAME);
 			assertTrue(flag);
 			Reporter.addStepLog("I have changed my first name suuccessfully");
+			soft.assertAll();
 	 }
 	 
 	 @And("^I close my browser$")

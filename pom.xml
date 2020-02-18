@@ -28,6 +28,14 @@
 			<artifactId>selenium-java</artifactId>
 			<version>3.141.59</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.jasypt/jasypt -->
+     <dependency>
+    <groupId>org.jasypt</groupId>
+    <artifactId>jasypt</artifactId>
+    <version>1.9.3</version>
+      </dependency>
+		
 
 		<!-- <dependency>
 			<groupId>org.testng</groupId>
@@ -41,6 +49,7 @@
 			<artifactId>cucumber-java</artifactId>
 			<version>1.2.6</version>
 		</dependency>
+		
 
 
 		<!--  <dependency>
